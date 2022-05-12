@@ -14,7 +14,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Cache file
+      id: cache-file
+      uses: actions/cache@v3
+      with:
+        path: hello-world-copy.txt
+        key: hello-world-${{ hashFiles('hello-world.txt') }}
     - name: Copy file
+      if: steps.cache-file.outputs.cache-hit != 'true'
       run: cp hello-world.txt hello-world-copy.txt
     - name: Read file
       run: cat hello-world-copy.txt
